@@ -18,7 +18,7 @@
 #define _BMP085_H_
 
 /*===========================================================================*/
-/* Include files.					                                                   */
+/* Include files.                                                            */
 /*===========================================================================*/
 #include "i2c.h"
 
@@ -47,8 +47,8 @@
 /* Driver data structures and types.                                         */
 /*===========================================================================*/
 
-/*
- * BMP085 calibration data coefficients structure
+/**
+ * @brief BMP085 calibration data coefficients structure
  */
 typedef struct bmp085_eprom{
   int16_t ac1;
