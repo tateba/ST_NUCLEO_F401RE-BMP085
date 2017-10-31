@@ -71,7 +71,7 @@ endif
 
 # Enables the use of FPU (no, softfp, hard).
 ifeq ($(USE_FPU),)
-  USE_FPU = hard
+  USE_FPU = no
 endif
 
 #
@@ -86,7 +86,8 @@ endif
 PROJECT = ch
 
 # Imported source files and paths
-CHIBIOS = ../../e/
+CHIBIOS = ../../../ChibiOS_17.6.0
+DRIVERS = ../../../drivers
 # Startup files.
 include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
 # HAL-OSAL files (optional).
@@ -97,26 +98,26 @@ include $(CHIBIOS)/os/hal/osal/rt/osal.mk
 # RTOS files (optional).
 include $(CHIBIOS)/os/rt/rt.mk
 include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
-# Other files (optional).
-#include $(CHIBIOS)/os/ex/Bosch/bmp085.mk
+# chprintf files (optional).
 include $(CHIBIOS)/os/hal/lib/streams/streams.mk
+include $(DRIVERS)/iic/iic.mk
+include $(DRIVERS)/bmp085/bmp085.mk
 
 # Define linker script file here
 LDSCRIPT= $(STARTUPLD)/STM32F401xE.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CSRC = $(STARTUPSRC) \
-       $(KERNSRC) \
-       $(PORTSRC) \
-       $(OSALSRC) \
-       $(HALSRC) \
-       $(PLATFORMSRC) \
-       $(BOARDSRC) \
-       $(BMP085SRC) \
-       $(STREAMSSRC) \
-       i2c.c \
-       bmp085.c \
+CSRC = $(STARTUPSRC)                              \
+       $(KERNSRC)                                 \
+       $(PORTSRC)                                 \
+       $(OSALSRC)                                 \
+       $(HALSRC)                                  \
+       $(PLATFORMSRC)                             \
+       $(BOARDSRC)                                \
+       $(CHIBIOS)/os/hal/lib/streams/chprintf.c   \
+       $(IICSRC)                                  \
+       $(BMP085SRC)                               \
        main.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
@@ -147,10 +148,10 @@ TCPPSRC =
 ASMSRC =
 ASMXSRC = $(STARTUPASM) $(PORTASM) $(OSALASM)
 
-INCDIR = $(CHIBIOS)/os/license \
-         $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC) \
-         $(HALINC) $(PLATFORMINC) $(BOARDINC) $(BMP085INC) \
-         $(STREAMSINC) $(CHIBIOS)/os/various
+INCDIR = $(CHIBIOS)/os/license                            \
+         $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC)   \
+         $(HALINC) $(PLATFORMINC) $(BOARDINC) $(TESTINC)  \
+         $(STREAMSINC) $(CHIBIOS)/os/various $(IICINC) $(BMP085INC)
 
 #
 # Project, sources and paths
@@ -200,7 +201,7 @@ CPPWARN = -Wall -Wextra -Wundef
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS = -DCHPRINTF_USE_FLOAT=1
+UDEFS =
 
 # Define ASM defines here
 UADEFS =
@@ -220,4 +221,3 @@ ULIBS =
 
 RULESPATH = $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC
 include $(RULESPATH)/rules.mk
-include myrules.mk
