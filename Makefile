@@ -102,22 +102,26 @@ include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
 include $(CHIBIOS)/os/hal/lib/streams/streams.mk
 include $(DRIVERS)/iic/iic.mk
 include $(DRIVERS)/bmp085/bmp085.mk
+include $(CHIBIOS)/os/various/shell/shell.mk
+include $(CHIBIOS)/test/rt/test.mk
 
 # Define linker script file here
 LDSCRIPT= $(STARTUPLD)/STM32F401xE.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CSRC = $(STARTUPSRC)                              \
-       $(KERNSRC)                                 \
-       $(PORTSRC)                                 \
-       $(OSALSRC)                                 \
-       $(HALSRC)                                  \
-       $(PLATFORMSRC)                             \
-       $(BOARDSRC)                                \
-       $(CHIBIOS)/os/hal/lib/streams/chprintf.c   \
-       $(IICSRC)                                  \
-       $(BMP085SRC)                               \
+CSRC = $(STARTUPSRC)  \
+       $(KERNSRC)     \
+       $(PORTSRC)     \
+       $(OSALSRC)     \
+       $(HALSRC)      \
+       $(PLATFORMSRC) \
+       $(BOARDSRC)    \
+       $(STREAMSSRC)  \
+       $(IICSRC)      \
+       $(BMP085SRC)   \
+       $(TESTSRC)     \
+       $(SHELLSRC)    \
        main.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
@@ -148,10 +152,11 @@ TCPPSRC =
 ASMSRC =
 ASMXSRC = $(STARTUPASM) $(PORTASM) $(OSALASM)
 
-INCDIR = $(CHIBIOS)/os/license                            \
-         $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC)   \
-         $(HALINC) $(PLATFORMINC) $(BOARDINC) $(TESTINC)  \
-         $(STREAMSINC) $(CHIBIOS)/os/various $(IICINC) $(BMP085INC)
+INCDIR = $(CHIBIOS)/os/license                                      \
+         $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC)             \
+         $(HALINC) $(PLATFORMINC) $(BOARDINC) $(TESTINC)            \
+         $(STREAMSINC) $(CHIBIOS)/os/various $(IICINC) $(BMP085INC) \
+         $(SHELLINC)
 
 #
 # Project, sources and paths
@@ -213,7 +218,7 @@ UINCDIR =
 ULIBDIR =
 
 # List all user libraries here
-ULIBS =
+ULIBS = -lm
 
 #
 # End of user defines
@@ -221,3 +226,4 @@ ULIBS =
 
 RULESPATH = $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC
 include $(RULESPATH)/rules.mk
+include myrules.mk
