@@ -5,6 +5,9 @@ program:
 	@echo
 	@echo Done
 
+connect:
+	picocom -b 115200 /dev/ttyACM0
+
 fullclean:
 	@echo Delate all vim backup files.
 	rm *~
